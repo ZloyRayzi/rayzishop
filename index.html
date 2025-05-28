@@ -24,6 +24,7 @@
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
   }
 
   .left-buttons {
@@ -82,7 +83,7 @@
     text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   }
 
-  #registerModal {
+  #registerModal, #loginModal {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
@@ -130,25 +131,39 @@
     color: #2575fc;
     text-decoration: none;
     font-weight: bold;
+    cursor: pointer;
   }
 
-  /* Анимация загрузки */
-  .loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #2575fc;
+  /* Иконка профиля в правом верхнем углу */
+  #profileIcon {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
+    background-color: #ff5c5c;
+    cursor: pointer;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
     position: absolute;
     right: 20px;
-    top: 20px;
-    display: none;
+    top: 15px;
+    user-select: none;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease;
+  }
+  #profileIcon:hover {
+    background-color: #ff1f1f;
   }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  /* Центрирование модальных окон */
+  .modal-content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
   }
 </style>
 </head>
@@ -164,6 +179,8 @@
     <option value="en">English</option>
     <option value="uk">Українська</option>
   </select>
+
+  <div id="profileIcon" title="Личный кабинет">👤</div>
 </header>
 
 <main>
@@ -171,16 +188,29 @@
   <p class="greeting" id="greetingText">Выберите язык из меню сверху</p>
 </main>
 
+<!-- Модальное окно регистрации -->
 <div id="registerModal">
   <div class="modal-content">
     <h2 id="registerTitle">Регистрация</h2>
-    <input type="text" id="name" placeholder="Имя" />
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Пароль" />
+    <input type="text" id="regName" placeholder="Имя" />
+    <input type="email" id="regEmail" placeholder="Email" />
+    <input type="password" id="regPassword" placeholder="Пароль" />
     <button id="submitRegister">Зарегистрироваться</button>
-    <div class="loader" id="loader"></div>
     <div class="modal-footer">
-      <span id="haveAccountText">Уже есть аккаунт? </span><a href="#" id="loginLink">Войти</a>
+      <span id="haveAccountText">Уже есть аккаунт? </span><a id="toLogin" href="#">Войти</a>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно входа -->
+<div id="loginModal">
+  <div class="modal-content">
+    <h2 id="loginTitle">Вход</h2>
+    <input type="email" id="loginEmail" placeholder="Email" />
+    <input type="password" id="loginPassword" placeholder="Пароль" />
+    <button id="submitLogin">Войти</button>
+    <div class="modal-footer">
+      <span id="noAccountText">Нет аккаунта? </span><a id="toRegister" href="#">Зарегистрироваться</a>
     </div>
   </div>
 </div>
@@ -192,11 +222,19 @@
   const homeBtn = document.getElementById('homeBtn');
   const registerBtn = document.getElementById('registerBtn');
   const registerModal = document.getElementById('registerModal');
-  const registerTitle = document.getElementById('registerTitle');
+  const loginModal = document.getElementById('loginModal');
+  const profileIcon = document.getElementById('profileIcon');
+
+  const regName = document.getElementById('regName');
+  const regEmail = document.getElementById('regEmail');
+  const regPassword = document.getElementById('regPassword');
   const submitRegister = document.getElementById('submitRegister');
-  const haveAccountText = document.getElementById('haveAccountText');
-  const loginLink = document.getElementById('loginLink');
-  const loader = document.getElementById('loader');
+  const toLogin = document.getElementById('toLogin');
+
+  const loginEmail = document.getElementById('loginEmail');
+  const loginPassword = document.getElementById('loginPassword');
+  const submitLogin = document.getElementById('submitLogin');
+  const toRegister = document.getElementById('toRegister');
 
   const translations = {
     ru: {
@@ -208,105 +246,12 @@
       registerTitle: "Регистрация",
       submit: "Зарегистрироваться",
       haveAccount: "Уже есть аккаунт?",
-      login: "Войти"
+      login: "Войти",
+      loginTitle: "Вход",
+      submitLogin: "Войти",
+      noAccount: "Нет аккаунта?",
+      toRegister: "Зарегистрироваться"
     },
     en: {
       welcome: "Welcome",
-      greeting: "Select a language from the menu above",
-      home: "Home",
-      homePageContent: "This is an empty page for future products.",
-      register: "Register",
-      registerTitle: "Register",
-      submit: "Sign Up",
-      haveAccount: "Already have an account?",
-      login: "Log in"
-    },
-    uk: {
-      welcome: "Ласкаво просимо",
-      greeting: "Оберіть мову в меню зверху",
-      home: "Головна",
-      homePageContent: "Це порожня сторінка для майбутніх товарів.",
-      register: "Реєстрація",
-      registerTitle: "Реєстрація",
-      submit: "Зареєструватися",
-      haveAccount: "Вже є акаунт?",
-      login: "Увійти"
-    }
-  };
-
-  let currentLang = 'uk';
-  langSelect.value = currentLang;
-  updateText(currentLang);
-
-  langSelect.addEventListener('change', (e) => {
-    currentLang = e.target.value;
-    updateText(currentLang);
-  });
-
-  homeBtn.addEventListener('click', () => {
-    pageTitle.textContent = translations[currentLang].home;
-    greetingText.textContent = translations[currentLang].homePageContent;
-  });
-
-  registerBtn.addEventListener('click', () => {
-    registerModal.style.display = 'flex';
-  });
-
-  registerModal.addEventListener('click', (e) => {
-    if (e.target === registerModal) {
-      registerModal.style.display = 'none';
-      clearForm();
-    }
-  });
-
-  // Очистка формы
-  function clearForm() {
-    document.getElementById('name').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('password').value = '';
-  }
-
-  submitRegister.addEventListener('click', () => {
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    if (!name || !email || !password) {
-      alert('Пожалуйста, заполните все поля.');
-      return;
-    }
-
-    // Показать loader и заблокировать кнопку
-    loader.style.display = 'block';
-    submitRegister.disabled = true;
-    submitRegister.textContent = '';
-
-    // Имитация регистрации (например, 2 секунды)
-    setTimeout(() => {
-      loader.style.display = 'none';
-      submitRegister.disabled = false;
-      submitRegister.textContent = translations[currentLang].submit;
-
-      // Скрываем модальное окно регистрации
-      registerModal.style.display = 'none';
-      clearForm();
-
-      // Переходим на страницу личного кабинета (пример)
-      window.location.href = 'dashboard.html';
-    }, 2000);
-  });
-
-  function updateText(lang) {
-    pageTitle.textContent = translations[lang].welcome;
-    greetingText.textContent = translations[lang].greeting;
-    homeBtn.textContent = translations[lang].home;
-    registerBtn.textContent = translations[lang].register;
-    registerTitle.textContent = translations[lang].registerTitle;
-    submitRegister.textContent = translations[lang].submit;
-    haveAccountText.textContent = translations[lang].haveAccount + ' ';
-    loginLink.textContent = translations[lang].login;
-  }
-</script>
-
-</body>
-</html>
+      greeting:
