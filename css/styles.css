@@ -1,44 +1,169 @@
+/* Общие стили */
 body {
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
-  color: #333;
-  margin: 0;
-  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  margin: 0; padding: 0;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-h1 {
-  color: #2c3e50;
+/* Хедер */
+header {
+  background-color: rgba(0,0,0,0.3);
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  position: relative;
+  user-select: none;
 }
 
-#language-selector {
-  margin-bottom: 20px;
+/* Левая часть с кнопками */
+.left-buttons {
+  display: flex;
+  gap: 20px;
 }
 
-#products > div {
-  background: white;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+/* Кнопки большие с анимацией */
 .btn-home, .btn-register {
   background-color: #ff5c5c;
   border: none;
   border-radius: 30px;
-  padding: 10px 25px;
+  padding: 14px 40px;
   color: white;
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-  user-select: none;
+  transition: background-color 0.3s ease, transform 0.15s ease;
 }
-
 .btn-home:hover, .btn-register:hover {
   background-color: #ff1f1f;
 }
-
 .btn-home:active, .btn-register:active {
   transform: scale(0.95);
-  background-color: #cc1717;
+}
+
+/* Название магазина по центру */
+.shop-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Segoe UI Black', 'Arial Black', Arial, sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+
+/* Селект выбора языка справа */
+select#language {
+  font-size: 18px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  color: #333;
+  min-width: 140px;
+}
+select#language:focus {
+  outline: 2px solid #2575fc;
+}
+
+/* Основной контент */
+main {
+  flex-grow: 1;
+  padding: 50px 30px;
+  background: rgba(255 255 255 / 0.15);
+  border-radius: 20px;
+  margin: 30px auto;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+}
+
+p.greeting {
+  font-size: 1.5em;
+  margin-top: 0;
+  margin-bottom: 40px;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Модальные окна */
+#registerModal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 90%;
+  color: #333;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.modal-content h2 {
+  margin-top: 0;
+}
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+.modal-content button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2575fc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+}
+.modal-content button:hover {
+  background-color: #1a53c6;
+}
+.modal-content button:active {
+  transform: scale(0.97);
+}
+
+.modal-footer {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 15px;
+}
+.modal-footer a {
+  color: #2575fc;
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+.modal-footer a:hover {
+  text-decoration: underline;
 }

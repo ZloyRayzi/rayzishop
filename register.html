@@ -4,209 +4,208 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RayziShop - Регистрация</title>
-
 <style>
   body {
+    margin: 0; padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    margin: 0; padding: 0;
-    color: #fff;
+    color: white;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
   header {
-    background-color: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.25);
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
-  .left-buttons button {
-    background-color: #ff5c5c;
-    border: none;
-    border-radius: 30px;
-    padding: 10px 25px;
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 10px;
-  }
-  .left-buttons button:hover {
-    background-color: #ff1f1f;
-  }
-  select#language {
+  #language {
+    border-radius: 8px;
     font-size: 16px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: none;
+    padding: 6px 12px;
     cursor: pointer;
-    font-weight: 600;
-    color: #333;
+  }
+  #userCircle {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: #2575fc;
+    color: white;
+    font-weight: bold;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 15px;
+    user-select: none;
+    font-size: 18px;
   }
   main {
     flex-grow: 1;
-    padding: 50px 30px;
-    background: rgba(255 255 255 / 0.15);
-    border-radius: 20px;
-    margin: 30px auto;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-    text-align: center;
-  }
-  main h2 {
-    margin-bottom: 20px;
-  }
-  main input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: none;
-    font-size: 16px;
-  }
-  main button {
-    width: 100%;
-    padding: 12px;
-    background-color: #2575fc;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 18px;
-    cursor: pointer;
-    margin-top: 15px;
-  }
-  main button:hover {
-    background-color: #1b59d0;
-  }
-  .error-msg {
-    color: #ff7b7b;
-    margin-top: 10px;
-    font-weight: 600;
-  }
-  /* Аватар в шапке */
-  #userAvatar {
-    width: 40px; height: 40px;
-    background: #ff5c5c;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 30px;
+  }
+  .form-container {
+    background: white;
+    color: #333;
+    border-radius: 20px;
+    padding: 30px 40px;
+    width: 350px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  h1 {
+    text-align: center;
+    color: #2575fc;
+    margin-bottom: 20px;
+  }
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  button {
+    width: 100%;
+    padding: 14px 0;
+    margin-top: 10px;
+    background-color: #2575fc;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 18px;
     cursor: pointer;
-    user-select: none;
-    margin-left: 15px;
+    box-shadow: 0 4px 15px rgba(37,117,252,0.7);
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #1a52c0;
+  }
+  .toggle-link {
+    margin-top: 15px;
+    text-align: center;
+    color: #2575fc;
+    cursor: pointer;
+    font-weight: 600;
   }
 </style>
-
 </head>
 <body>
 
 <header>
-  <div class="left-buttons">
-    <button id="homeBtn">Главная</button>
+  <div>RayziShop</div>
+  <div style="display:flex; align-items:center;">
+    <select id="language" title="Выберите язык">
+      <option value="ru" selected>Русский</option>
+      <option value="en">English</option>
+      <option value="uk">Українська</option>
+    </select>
+    <div id="userCircle"></div>
   </div>
-  <select id="language" title="Выберите язык">
-    <option value="ru">Русский</option>
-    <option value="en">English</option>
-    <option value="uk">Українська</option>
-  </select>
-  <!-- Тут динамически будет аватар, если пользователь залогинен -->
 </header>
 
 <main>
-  <h2>Регистрация</h2>
-  <input type="text" id="name" placeholder="Имя" />
-  <input type="email" id="email" placeholder="Email" />
-  <input type="password" id="password" placeholder="Пароль" />
-  <button id="registerBtn">Зарегистрироваться</button>
-  <div class="error-msg" id="errorMsg"></div>
-  <p>Уже есть аккаунт? <a href="#" id="loginLink" style="color:#fff;text-decoration:underline; cursor:pointer;">Войти</a></p>
+  <div class="form-container">
+    <h1 id="formTitle">Регистрация</h1>
+    <div id="registerForm">
+      <input type="text" id="regName" placeholder="Имя" />
+      <input type="email" id="regEmail" placeholder="Email" />
+      <input type="password" id="regPassword" placeholder="Пароль" />
+      <button id="submitRegister">Зарегистрироваться</button>
+      <div class="toggle-link" id="toLogin">Уже есть аккаунт? Войти</div>
+    </div>
+    <div id="loginForm" style="display:none;">
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Пароль" />
+      <button id="submitLogin">Войти</button>
+      <div class="toggle-link" id="toRegister">Нет аккаунта? Зарегистрироваться</div>
+    </div>
+  </div>
 </main>
 
 <script>
-  const langSelect = document.getElementById('language');
-  const homeBtn = document.getElementById('homeBtn');
-  const registerBtn = document.getElementById('registerBtn');
-  const errorMsg = document.getElementById('errorMsg');
-  const loginLink = document.getElementById('loginLink');
-  const header = document.querySelector('header');
+  const registerForm = document.getElementById('registerForm');
+  const loginForm = document.getElementById('loginForm');
+  const formTitle = document.getElementById('formTitle');
+  const toLogin = document.getElementById('toLogin');
+  const toRegister = document.getElementById('toRegister');
+  const userCircle = document.getElementById('userCircle');
 
-  // Перенаправления
-  homeBtn.addEventListener('click', () => {
-    window.location.href = 'index.html';
-  });
-
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.location.href = 'login.html';  // Создай login.html с аналогичной логикой
-  });
-
-  // Проверка и показ аватара если пользователь залогинен
-  function showUserAvatar() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user) {
-      if (!document.getElementById('userAvatar')) {
-        const avatar = document.createElement('div');
-        avatar.id = 'userAvatar';
-        avatar.textContent = user.name[0].toUpperCase();
-        avatar.title = 'Личный кабинет';
-        avatar.addEventListener('click', () => {
-          window.location.href = 'dashboard.html';
-        });
-        header.appendChild(avatar);
-      }
+  function checkUser() {
+    const currentUser = JSON.parse(localStorage.getItem('rayzishop_currentUser'));
+    if(currentUser){
+      userCircle.style.display = 'flex';
+      userCircle.textContent = currentUser.name[0].toUpperCase();
+    } else {
+      userCircle.style.display = 'none';
     }
   }
+  checkUser();
 
-  showUserAvatar();
+  userCircle.onclick = () => {
+    window.location.href = 'dashboard.html';
+  };
 
-  registerBtn.addEventListener('click', () => {
-    errorMsg.textContent = '';
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim().toLowerCase();
-    const password = document.getElementById('password').value;
+  toLogin.onclick = () => {
+    registerForm.style.display = 'none';
+    loginForm.style.display = 'block';
+    formTitle.textContent = 'Вход';
+  };
+  toRegister.onclick = () => {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+    formTitle.textContent = 'Регистрация';
+  };
+
+  const usersKey = 'rayzishop_users';
+
+  document.getElementById('submitRegister').addEventListener('click', () => {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim().toLowerCase();
+    const password = document.getElementById('regPassword').value;
 
     if (!name || !email || !password) {
-      errorMsg.textContent = 'Пожалуйста, заполните все поля';
+      alert('Пожалуйста, заполните все поля');
       return;
     }
-
-    // Проверка валидности email (простой)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      errorMsg.textContent = 'Введите корректный Email';
+    let users = JSON.parse(localStorage.getItem(usersKey)) || [];
+    if(users.find(u => u.email === email)) {
+      alert('Пользователь с таким email уже зарегистрирован');
       return;
     }
-
-    // Получаем пользователей из localStorage
-    let users = JSON.parse(localStorage.getItem('users')) || [];
-
-    // Проверка есть ли уже такой email
-    if (users.some(u => u.email === email)) {
-      errorMsg.textContent = 'Пользователь с таким Email уже зарегистрирован';
-      return;
-    }
-
-    // Добавляем нового пользователя
     users.push({ name, email, password, balance: 0, currency: 'USD' });
-    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem(usersKey, JSON.stringify(users));
+    alert('Регистрация прошла успешно! Теперь войдите в аккаунт.');
+    document.getElementById('regName').value = '';
+    document.getElementById('regEmail').value = '';
+    document.getElementById('regPassword').value = '';
+    toLogin.click();
+  });
 
-    // Сохраняем текущего пользователя (авторизация)
-    localStorage.setItem('currentUser', JSON.stringify({ name, email }));
-
-    // Переходим в личный кабинет
-    window.location.href = 'dashboard.html';
+  document.getElementById('submitLogin').addEventListener('click', () => {
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) {
+      alert('Пожалуйста, заполните все поля');
+      return;
+    }
+    let users = JSON.parse(localStorage.getItem(usersKey)) || [];
+    const user = users.find(u => u.email === email && u.password === password);
+    if(!user) {
+      alert('Неверный email или пароль');
+      return;
+    }
+    localStorage.setItem('rayzishop_currentUser', JSON.stringify(user));
+    alert(`Добро пожаловать, ${user.name}!`);
+    window.location.href = 'home.html';
   });
 </script>
 
 </body>
 </html>
-
