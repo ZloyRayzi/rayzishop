@@ -1,164 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RayziShop</title>
-
 <style>
-  /* Общие стили */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    margin: 0; padding: 0;
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  body { font-family: Arial, sans-serif; background: #222; color: #fff; margin: 0; padding: 20px;}
+  button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
+  #modal {
+    display: none;
+    position: fixed; top:0; left:0; width:100vw; height:100vh;
+    background: rgba(0,0,0,0.7);
+    justify-content: center; align-items: center;
   }
-
-  header {
-    background-color: rgba(0,0,0,0.3);
-    padding: 15px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  #modal .content {
+    background: #fff; color:#000; padding: 20px; border-radius: 10px; width: 300px;
   }
-
-  /* Группа кнопок слева */
-  .btn-group {
-    display: flex;
-    gap: 15px;
+  #modal input {
+    width: 100%; margin: 8px 0; padding: 8px;
   }
-
-  /* Кнопка Главная и Регистрация */
-  .btn-home {
-    background-color: #ff5c5c;
-    border: none;
-    border-radius: 30px;
-    padding: 10px 25px;
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .btn-home:hover {
-    background-color: #ff1f1f;
-  }
-
-  /* Селект выбора языка */
-  select#language {
-    font-size: 16px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    color: #333;
-  }
-
-  main {
-    flex-grow: 1;
-    padding: 50px 30px;
-    background: rgba(255 255 255 / 0.15);
-    border-radius: 20px;
-    margin: 30px auto;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-    text-align: center;
-  }
-
-  h1 {
-    font-size: 3em;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-  }
-
-  p.greeting {
-    font-size: 1.5em;
-    margin-top: 0;
-    margin-bottom: 40px;
-    font-weight: 600;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  #modal a {
+    color: blue; cursor: pointer; text-decoration: underline;
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="btn-group">
-    <button class="btn-home" id="homeBtn">Главная</button>
-    <button class="btn-home" id="registerBtn">Регистрация</button>
+<button id="homeBtn">Главная</button>
+<button id="registerBtn">Регистрация</button>
+
+<div id="contentArea">
+  <h1>Добро пожаловать</h1>
+  <p>Выберите язык из меню сверху</p>
+</div>
+
+<div id="modal">
+  <div class="content">
+    <h2 id="modalTitle">Регистрация</h2>
+    <input type="text" id="name" placeholder="Имя" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Пароль" />
+    <button id="submitBtn">Зарегистрироваться</button>
+    <p>
+      Уже есть аккаунт? <a id="toggleLink">Войти</a>
+    </p>
   </div>
-
-  <select id="language" title="Выберите язык">
-    <option value="ru">Русский</option>
-    <option value="en">English</option>
-    <option value="uk">Українська</option>
-  </select>
-</header>
-
-<main>
-  <h1 id="pageTitle">Добро пожаловать</h1>
-  <p class="greeting" id="greetingText">Выберите язык из меню сверху</p>
-</main>
+</div>
 
 <script>
-  const langSelect = document.getElementById('language');
-  const pageTitle = document.getElementById('pageTitle');
-  const greetingText = document.getElementById('greetingText');
   const homeBtn = document.getElementById('homeBtn');
   const registerBtn = document.getElementById('registerBtn');
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modalTitle');
+  const submitBtn = document.getElementById('submitBtn');
+  const toggleLink = document.getElementById('toggleLink');
+  const contentArea = document.getElementById('contentArea');
 
-  // Тексты для разных языков
-  const translations = {
-    ru: {
-      welcome: "Добро пожаловать",
-      greeting: "Выберите язык из меню сверху",
-      home: "Главная",
-      register: "Регистрация",
-      homePageContent: "Это пустая страница для будущих товаров."
-    },
-    en: {
-      welcome: "Welcome",
-      greeting: "Select a language from the menu above",
-      home: "Home",
-      register: "Register",
-      homePageContent: "This is an empty page for future products."
-    },
-    uk: {
-      welcome: "Ласкаво просимо",
-      greeting: "Оберіть мову в меню зверху",
-      home: "Головна",
-      register: "Реєстрація",
-      homePageContent: "Це порожня сторінка для майбутніх товарів."
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+
+  let isLogin = false;
+
+  homeBtn.onclick = () => {
+    contentArea.innerHTML = `<h1>Главная страница</h1><p>Это пустая страница для будущих товаров.</p>`;
+  };
+
+  registerBtn.onclick = () => {
+    isLogin = false;
+    openModal();
+  };
+
+  toggleLink.onclick = () => {
+    isLogin = !isLogin;
+    if (isLogin) {
+      modalTitle.textContent = 'Вход';
+      submitBtn.textContent = 'Войти';
+      toggleLink.textContent = 'Регистрация';
+      nameInput.style.display = 'none';
+    } else {
+      modalTitle.textContent = 'Регистрация';
+      submitBtn.textContent = 'Зарегистрироваться';
+      toggleLink.textContent = 'Войти';
+      nameInput.style.display = 'block';
+    }
+    clearInputs();
+  };
+
+  submitBtn.onclick = () => {
+    if (isLogin) {
+      alert(`Вход с Email: ${emailInput.value}`);
+    } else {
+      alert(`Регистрация: ${nameInput.value}, Email: ${emailInput.value}`);
+    }
+    modal.style.display = 'none';
+    clearInputs();
+  };
+
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+      clearInputs();
     }
   };
 
-  // Установить язык по умолчанию (укр)
-  let currentLang = 'uk';
-  langSelect.value = currentLang;
-  updateText(currentLang);
+  function openModal() {
+    modal.style.display = 'flex';
+    modal.style.flexDirection = 'column';
+    clearInputs();
+    if (!isLogin) {
+      nameInput.style.display = 'block';
+      modalTitle.textContent = 'Регистрация';
+      submitBtn.textContent = 'Зарегистрироваться';
+      toggleLink.textContent = 'Войти';
+    } else {
+      nameInput.style.display = 'none';
+      modalTitle.textContent = 'Вход';
+      submitBtn.textContent = 'Войти';
+      toggleLink.textContent = 'Регистрация';
+    }
+  }
 
-  langSelect.addEventListener('change', (e) => {
-    currentLang = e.target.value;
-    updateText(currentLang);
-  });
-
-  homeBtn.addEventListener('click', () => {
-    // Переходим на "пустую" страницу — просто меняем содержимое main
-    pageTitle.textContent = translations[currentLang].home;
-    greetingText.textContent = translations[currentLang].homePageContent;
-  });
-
-  function updateText(lang) {
-    pageTitle.textContent = translations[lang].welcome;
-    greetingText.textContent = translations[lang].greeting;
-    homeBtn.textContent = translations[lang].home;
-    registerBtn.textContent = translations[lang].register;
+  function clearInputs() {
+    nameInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = '';
   }
 </script>
 

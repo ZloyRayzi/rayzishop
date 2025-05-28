@@ -82,7 +82,6 @@
     text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   }
 
-  /* Модальное окно регистрации */
   #registerModal {
     position: fixed;
     top: 0; left: 0;
@@ -130,6 +129,7 @@
     color: #2575fc;
     text-decoration: none;
     font-weight: bold;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -152,10 +152,10 @@
   <p class="greeting" id="greetingText">Выберите язык из меню сверху</p>
 </main>
 
-<!-- Модальное окно -->
 <div id="registerModal">
   <div class="modal-content">
     <h2 id="registerTitle">Регистрация</h2>
+    <input type="text" id="name" placeholder="Имя" />
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Пароль" />
     <button id="submitRegister">Зарегистрироваться</button>
@@ -177,6 +177,10 @@
   const haveAccountText = document.getElementById('haveAccountText');
   const loginLink = document.getElementById('loginLink');
 
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+
   const translations = {
     ru: {
       welcome: "Добро пожаловать",
@@ -187,7 +191,15 @@
       registerTitle: "Регистрация",
       submit: "Зарегистрироваться",
       haveAccount: "Уже есть аккаунт?",
-      login: "Войти"
+      login: "Войти",
+      loginTitle: "Вход",
+      submitLogin: "Войти",
+      noNameError: "Пожалуйста, введите имя.",
+      noEmailError: "Пожалуйста, введите email.",
+      noPasswordError: "Пожалуйста, введите пароль.",
+      registeredSuccess: "Регистрация успешна!",
+      loginSuccess: "Вход успешен!",
+      loginFailed: "Неверный email или пароль."
     },
     en: {
       welcome: "Welcome",
@@ -198,7 +210,15 @@
       registerTitle: "Register",
       submit: "Sign Up",
       haveAccount: "Already have an account?",
-      login: "Log in"
+      login: "Log in",
+      loginTitle: "Login",
+      submitLogin: "Log In",
+      noNameError: "Please enter your name.",
+      noEmailError: "Please enter your email.",
+      noPasswordError: "Please enter your password.",
+      registeredSuccess: "Registration successful!",
+      loginSuccess: "Login successful!",
+      loginFailed: "Incorrect email or password."
     },
     uk: {
       welcome: "Ласкаво просимо",
@@ -209,13 +229,27 @@
       registerTitle: "Реєстрація",
       submit: "Зареєструватися",
       haveAccount: "Вже є акаунт?",
-      login: "Увійти"
+      login: "Увійти",
+      loginTitle: "Вхід",
+      submitLogin: "Увійти",
+      noNameError: "Будь ласка, введіть ім'я.",
+      noEmailError: "Будь ласка, введіть email.",
+      noPasswordError: "Будь ласка, введіть пароль.",
+      registeredSuccess: "Реєстрація успішна!",
+      loginSuccess: "Вхід успішний!",
+      loginFailed: "Невірний email або пароль."
     }
   };
 
   let currentLang = 'uk';
   langSelect.value = currentLang;
   updateText(currentLang);
+
+  // Хранилище зарегистрированных пользователей (примитивное)
+  const users = [];
+
+  // Режим: false - регистрация, true - вход
+  let isLoginMode = false;
 
   langSelect.addEventListener('change', (e) => {
     currentLang = e.target.value;
@@ -228,12 +262,65 @@
   });
 
   registerBtn.addEventListener('click', () => {
-    registerModal.style.display = 'flex';
+    isLoginMode = false;
+    showRegisterModal();
   });
 
   registerModal.addEventListener('click', (e) => {
     if (e.target === registerModal) {
       registerModal.style.display = 'none';
+      clearForm();
+    }
+  });
+
+  loginLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!isLoginMode) {
+      switchToLogin();
+    } else {
+      switchToRegister();
+    }
+  });
+
+  submitRegister.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!name) {
+      alert(translations[currentLang].noNameError);
+      return;
+    }
+    if (!email) {
+      alert(translations[currentLang].noEmailError);
+      return;
+    }
+    if (!password) {
+      alert(translations[currentLang].noPasswordError);
+      return;
+    }
+
+    if (isLoginMode) {
+      // Логика входа
+      const user = users.find(u => u.email === email && u.password === password);
+      if (user) {
+        alert(translations[currentLang].loginSuccess);
+        registerModal.style.display = 'none';
+        clearForm();
+      } else {
+        alert(translations[currentLang].loginFailed);
+      }
+    } else {
+      // Логика регистрации
+      const exists = users.some(u => u.email === email);
+      if (exists) {
+        alert("Этот email уже зарегистрирован.");
+        return;
+      }
+      users.push({name, email, password});
+      alert(translations[currentLang].registeredSuccess);
+      registerModal.style.display = 'none';
+      clearForm();
     }
   });
 
@@ -242,10 +329,43 @@
     greetingText.textContent = translations[lang].greeting;
     homeBtn.textContent = translations[lang].home;
     registerBtn.textContent = translations[lang].register;
-    registerTitle.textContent = translations[lang].registerTitle;
-    submitRegister.textContent = translations[lang].submit;
     haveAccountText.textContent = translations[lang].haveAccount + ' ';
     loginLink.textContent = translations[lang].login;
+
+    if (isLoginMode) {
+      registerTitle.textContent = translations[lang].loginTitle;
+      submitRegister.textContent = translations[lang].submitLogin;
+      nameInput.style.display = 'none';
+    } else {
+      registerTitle.textContent = translations[lang].registerTitle;
+      submitRegister.textContent = translations[lang].submit;
+      nameInput.style.display = 'block';
+    }
+  }
+
+  function showRegisterModal() {
+    isLoginMode = false;
+    updateText(currentLang);
+    clearForm();
+    registerModal.style.display = 'flex';
+  }
+
+  function switchToLogin() {
+    isLoginMode = true;
+    updateText(currentLang);
+    clearForm();
+  }
+
+  function switchToRegister() {
+    isLoginMode = false;
+    updateText(currentLang);
+    clearForm();
+  }
+
+  function clearForm() {
+    nameInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = '';
   }
 </script>
 
