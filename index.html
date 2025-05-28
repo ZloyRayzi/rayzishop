@@ -1,97 +1,172 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RayziShop - Главная</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    margin: 0; padding: 0;
-    color: #fff;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-  }
-  header {
-    background: rgba(0,0,0,0.3);
-    padding: 15px 30px;
-    display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    position: relative;
-  }
-  .left-buttons {
-    display: flex; gap: 20px;
-  }
-  .btn-home, .btn-register {
-    background: #ff5c5c;
-    border: none;
-    border-radius: 30px;
-    padding: 14px 40px;
-    font-weight: 700;
-    font-size: 20px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.15s ease;
-  }
-  .btn-home:hover, .btn-register:hover {
-    background: #ff1f1f;
-  }
-  .btn-home:active, .btn-register:active {
-    transform: scale(0.95);
-  }
-  .shop-title {
-    position: absolute;
-    left: 50%; transform: translateX(-50%);
-    font-weight: 900;
-    font-size: 2.8rem;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-    pointer-events: none;
-  }
-  select#language {
-    font-size: 18px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    color: #333;
-    min-width: 140px;
-  }
-  main {
-    flex-grow: 1;
-    padding: 50px 30px;
-    background: rgba(255 255 255 / 0.15);
-    border-radius: 20px;
-    margin: 30px auto;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-    text-align: center;
-  }
-  h1 {
-    font-size: 3em;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-  }
-  p.greeting {
-    font-size: 1.5em;
-    margin-top: 0; margin-bottom: 40px;
-    font-weight: 600;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RayziShop</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .left-buttons button {
+      background: #ffffff20;
+      border: 2px solid white;
+      padding: 8px 16px;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .left-buttons button:hover {
+      background: white;
+      color: #2575fc;
+    }
+
+    #language {
+      background: white;
+      color: #2575fc;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: none;
+      font-weight: bold;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.4rem;
+    }
+
+    /* Модалка */
+    #modal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: white;
+      color: #333;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      text-align: left;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-box h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .modal-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .modal-box button {
+      width: 100%;
+      background: #2575fc;
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .modal-box .switch {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .modal-box .switch a {
+      color: #2575fc;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #profileBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      background-color: white;
+      color: #2575fc;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      z-index: 1100;
+    }
+  </style>
 </head>
 <body>
 
 <header>
   <div class="left-buttons">
-    <button class="btn-home" id="homeBtn">Главная</button>
-    <button class="btn-register" id="registerBtn" onclick="location.href='register.html'">Регистрация</button>
+    <button id="homeBtn">Главная</button>
+    <button id="openModal">Войти / Регистрация</button>
   </div>
-  <div class="shop-title">RayziShop</div>
-  <select id="language" title="Выберите язык">
-    <option value="ru" selected>Русский</option>
+  <select id="language">
+    <option value="ru">Русский</option>
     <option value="en">English</option>
     <option value="uk">Українська</option>
   </select>
@@ -99,47 +174,160 @@
 
 <main>
   <h1 id="pageTitle">Добро пожаловать</h1>
-  <p class="greeting" id="greetingText">Выберите язык из меню сверху</p>
+  <p id="greetingText">Выберите язык из меню сверху</p>
 </main>
 
-<script>
-  const langSelect = document.getElementById('language');
-  const pageTitle = document.getElementById('pageTitle');
-  const greetingText = document.getElementById('greetingText');
-  const homeBtn = document.getElementById('homeBtn');
+<!-- Кнопка профиля -->
+<button id="profileBtn" title="Личный кабинет">👤</button>
 
+<!-- Модалка -->
+<div id="modal">
+  <div class="modal-box" id="authBox">
+    <h2 id="formTitle">Регистрация</h2>
+    <input type="text" id="name" placeholder="Имя">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Пароль">
+    <button id="submitBtn">Зарегистрироваться</button>
+    <div class="switch">
+      <span id="switchText">Уже есть аккаунт? <a id="switchLink">Войти</a></span>
+    </div>
+  </div>
+</div>
+
+<script>
   const translations = {
     ru: {
       welcome: "Добро пожаловать",
       greeting: "Выберите язык из меню сверху",
       home: "Главная",
-      homePageContent: "Это пустая страница для будущих товаров.",
       register: "Регистрация",
+      login: "Войти",
+      already: "Уже есть аккаунт?",
+      noAccount: "Нет аккаунта?",
+      profile: "Личный кабинет"
     },
     en: {
       welcome: "Welcome",
       greeting: "Select a language from the menu above",
       home: "Home",
-      homePageContent: "This is an empty page for future products.",
       register: "Register",
+      login: "Log in",
+      already: "Already have an account?",
+      noAccount: "No account yet?",
+      profile: "Profile"
     },
     uk: {
       welcome: "Ласкаво просимо",
       greeting: "Оберіть мову в меню зверху",
       home: "Головна",
-      homePageContent: "Це порожня сторінка для майбутніх товарів.",
       register: "Реєстрація",
+      login: "Увійти",
+      already: "Вже є акаунт?",
+      noAccount: "Ще не має акаунту?",
+      profile: "Профіль"
     }
   };
 
-  langSelect.addEventListener('change', (e) => {
-    const lang = e.target.value;
-    pageTitle.textContent = translations[lang].welcome;
-    greetingText.textContent = translations[lang].greeting;
-    homeBtn.textContent = translations[lang].home;
-    document.querySelector('.btn-register').textContent = translations[lang].register;
-  });
+  let lang = 'ru';
+  let isLoginMode = false;
+
+  const languageSelect = document.getElementById('language');
+  const homeBtn = document.getElementById('homeBtn');
+  const pageTitle = document.getElementById('pageTitle');
+  const greetingText = document.getElementById('greetingText');
+  const modal = document.getElementById('modal');
+  const openModalBtn = document.getElementById('openModal');
+  const switchLink = document.getElementById('switchLink');
+  const formTitle = document.getElementById('formTitle');
+  const switchText = document.getElementById('switchText');
+  const submitBtn = document.getElementById('submitBtn');
+  const profileBtn = document.getElementById('profileBtn');
+
+  function updateLangUI() {
+    const t = translations[lang];
+    pageTitle.textContent = t.welcome;
+    greetingText.textContent = t.greeting;
+    homeBtn.textContent = t.home;
+    openModalBtn.textContent = t.login + " / " + t.register;
+    updateFormText();
+  }
+
+  function updateFormText() {
+    const t = translations[lang];
+    formTitle.textContent = isLoginMode ? t.login : t.register;
+    submitBtn.textContent = isLoginMode ? t.login : t.register;
+    switchText.innerHTML = isLoginMode
+      ? `${t.noAccount} <a id="switchLink"> ${t.register}</a>`
+      : `${t.already} <a id="switchLink"> ${t.login}</a>`;
+    bindSwitch();
+  }
+
+  function bindSwitch() {
+    document.getElementById('switchLink').onclick = () => {
+      isLoginMode = !isLoginMode;
+      updateFormText();
+    };
+  }
+
+  languageSelect.onchange = () => {
+    lang = languageSelect.value;
+    updateLangUI();
+  };
+
+  homeBtn.onclick = () => {
+    updateLangUI();
+  };
+
+  openModalBtn.onclick = () => {
+    modal.style.display = 'flex';
+    isLoginMode = false;
+    updateFormText();
+  };
+
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+
+  submitBtn.onclick = () => {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if (!email || !password || (!isLoginMode && !name)) return;
+
+    if (isLoginMode) {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find(u => u.email === email && u.password === password);
+      if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        modal.style.display = 'none';
+        profileBtn.style.display = 'flex';
+      } else {
+        alert("Неверные данные");
+      }
+    } else {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      if (users.find(u => u.email === email)) {
+        alert("Email уже используется!");
+        return;
+      }
+      const newUser = { name, email, password, balance: 0 };
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      modal.style.display = 'none';
+      profileBtn.style.display = 'flex';
+    }
+  };
+
+  profileBtn.onclick = () => {
+    window.location.href = 'dashboard.html'; // или покажи модалку профиля
+  };
+
+  updateLangUI();
 </script>
 
 </body>
 </html>
+
