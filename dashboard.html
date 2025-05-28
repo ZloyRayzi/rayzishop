@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Личный кабинет - RayziShop</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    display: flex;
+    height: 100vh;
+    color: #333;
+  }
+  /* Боковая панель */
+  .sidebar {
+    width: 250px;
+    background: #2575fc;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  .sidebar h2 {
+    margin: 0 0 30px;
+  }
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #ddd;
+    margin-bottom: 15px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  .edit-profile {
+    background: #1b5ed1;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 30px;
+  }
+  nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  nav ul li {
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  nav ul li:hover {
+    text-decoration: underline;
+  }
+  /* Основной контент */
+  .content {
+    flex-grow: 1;
+    padding: 30px;
+    background: white;
+    overflow-y: auto;
+  }
+  h1 {
+    margin-top: 0;
+  }
+  /* Пример карточки товара */
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+  .product-card img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .product-card h3 {
+    margin: 10px 0 5px;
+  }
+  .balance-section {
+    margin-bottom: 30px;
+  }
+  .balance-section label {
+    font-weight: 600;
+    margin-right: 10px;
+  }
+  .promo-section {
+    margin-top: 20px;
+  }
+  .promo-section input {
+    padding: 8px;
+    width: 200px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+  }
+  .promo-section button {
+    padding: 8px 15px;
+    background: #2575fc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Профиль</h2>
+  <img src="https://via.placeholder.com/120" alt="Фото профиля" class="profile-pic" id="profilePic" />
+  <button class="edit-profile" id="editProfileBtn">Редактировать профиль</button>
+  <nav>
+    <ul>
+      <li id="navProfile">Профиль</li>
+      <li id="navProducts">Товары</li>
+      <li id="navBalance">Баланс</li>
+      <li id="navPromo">Промокод</li>
+    </ul>
+  </nav>
+</div>
+
+<div class="content" id="contentArea">
+  <h1>Добро пожаловать в личный кабинет</h1>
+  <p>Выберите пункт меню слева, чтобы начать.</p>
+</div>
+
+<script>
+  const contentArea = document.getElementById('contentArea');
+
+  const profileContent = `
+    <h1>Профиль</h1>
+    <p><strong>Имя:</strong> Иван Иванов</p>
+    <p><strong>Email:</strong> ivan@example.com</p>
+    <button id="changePhotoBtn">Сменить фото</button>
+  `;
+
+  const productsContent = `
+    <h1>Мои товары</h1>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/400x200" alt="Товар 1"/>
+      <h3>Товар 1</h3>
+      <p>Описание товара. Цена: 1000 ₽</p>
+    </div>
+    <button id="addProductBtn">Добавить товар</button>
+  `;
+
+  const balanceContent = `
+    <h1>Баланс</h1>
+    <div class="balance-section">
+      <label>Текущий баланс:</label><span>5000 ₽</span>
+    </div>
+    <div class="balance-section">
+      <label for="currencySelect">Валюта:</label>
+      <select id="currencySelect">
+        <option value="RUB">₽ Рубли</option>
+        <option value="USD">$ Доллары</option>
+        <option value="EUR">€ Евро</option>
+      </select>
+    </div>
+  `;
+
+  const promoContent = `
+    <h1>Промокод</h1>
+    <div class="promo-section">
+      <input type="text" id="promoCodeInput" placeholder="Введите промокод" />
+      <button id="activatePromoBtn">Активировать</button>
+      <p id="promoMessage" style="margin-top:10px; font-weight: 600;"></p>
+    </div>
+  `;
+
+  document.getElementById('navProfile').addEventListener('click', () => {
+    contentArea.innerHTML = profileContent;
+    attachProfileListeners();
+  });
+
+  document.getElementById('navProducts').addEventListener('click', () => {
+    contentArea.innerHTML = productsContent;
+    attachProductsListeners();
+  });
+
+  document.getElementById('navBalance').addEventListener('click', () => {
+    contentArea.innerHTML = balanceContent;
+    attachBalanceListeners();
+  });
+
+  document.getElementById('navPromo').addEventListener('click', () => {
+    contentArea.innerHTML = promoContent;
+    attachPromoListeners();
+  });
+
+  // Функции для добавления обработчиков событий в динамическом контенте
+  function attachProfileListeners() {
+    const changePhotoBtn = document.getElementById('changePhotoBtn');
+    changePhotoBtn.addEventListener('click', () => {
+      alert('Функция смены фото пока не реализована.');
+    });
+  }
+
+  function attachProductsListeners() {
+    const addProductBtn = document.getElementById('addProductBtn');
+    addProductBtn.addEventListener('click', () => {
+      alert('Функция добавления товара пока не реализована.');
+    });
+  }
+
+  function attachBalanceListeners() {
+    const currencySelect = document.getElementById('currencySelect');
+    currencySelect.addEventListener('change', (e) => {
+      alert('Валюта изменена на: ' + e.target.value);
+    });
+  }
+
+  function attachPromoListeners() {
+    const activatePromoBtn = document.getElementById('activatePromoBtn');
+    const promoCodeInput = document.getElementById('promoCodeInput');
+    const promoMessage = document.getElementById('promoMessage');
+
+    activatePromoBtn.addEventListener('click', () => {
+      const code = promoCodeInput.value.trim();
+      if (code === '') {
+        promoMessage.textContent = 'Введите промокод.';
+        promoMessage.style.color = 'red';
+      } else {
+        promoMessage.textContent = `Промокод "${code}" активирован!`;
+        promoMessage.style.color = 'green';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

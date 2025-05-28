@@ -100,6 +100,7 @@
     width: 90%;
     color: #333;
     text-align: left;
+    position: relative;
   }
   .modal-content h2 {
     margin-top: 0;
@@ -130,6 +131,25 @@
     text-decoration: none;
     font-weight: bold;
   }
+
+  /* Анимация загрузки */
+  .loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2575fc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: none;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
@@ -158,6 +178,7 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Пароль" />
     <button id="submitRegister">Зарегистрироваться</button>
+    <div class="loader" id="loader"></div>
     <div class="modal-footer">
       <span id="haveAccountText">Уже есть аккаунт? </span><a href="#" id="loginLink">Войти</a>
     </div>
@@ -175,6 +196,7 @@
   const submitRegister = document.getElementById('submitRegister');
   const haveAccountText = document.getElementById('haveAccountText');
   const loginLink = document.getElementById('loginLink');
+  const loader = document.getElementById('loader');
 
   const translations = {
     ru: {
@@ -233,7 +255,45 @@
   registerModal.addEventListener('click', (e) => {
     if (e.target === registerModal) {
       registerModal.style.display = 'none';
+      clearForm();
     }
+  });
+
+  // Очистка формы
+  function clearForm() {
+    document.getElementById('name').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+  }
+
+  submitRegister.addEventListener('click', () => {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (!name || !email || !password) {
+      alert('Пожалуйста, заполните все поля.');
+      return;
+    }
+
+    // Показать loader и заблокировать кнопку
+    loader.style.display = 'block';
+    submitRegister.disabled = true;
+    submitRegister.textContent = '';
+
+    // Имитация регистрации (например, 2 секунды)
+    setTimeout(() => {
+      loader.style.display = 'none';
+      submitRegister.disabled = false;
+      submitRegister.textContent = translations[currentLang].submit;
+
+      // Скрываем модальное окно регистрации
+      registerModal.style.display = 'none';
+      clearForm();
+
+      // Переходим на страницу личного кабинета (пример)
+      window.location.href = 'dashboard.html';
+    }, 2000);
   });
 
   function updateText(lang) {

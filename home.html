@@ -1,50 +1,152 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Головна сторінка</title>
-  <style>
-    body {
-      background: linear-gradient(135deg, #007bff, #00c6ff);
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
-      text-align: center;
-    }
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    p {
-      font-size: 22px;
-      max-width: 600px;
-      margin: 0 auto;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-    }
-    a {
-      color: #fff;
-      text-decoration: underline;
-      margin-top: 30px;
-      display: inline-block;
-      font-weight: 600;
-      font-size: 18px;
-    }
-    a:hover {
-      color: #ffd700;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RayziShop — Главная</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    margin: 0; padding: 0;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background-color: rgba(0,0,0,0.3);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .left-buttons {
+    display: flex;
+    gap: 15px;
+  }
+  .btn-home, .btn-register {
+    background-color: #ff5c5c;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 25px;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .btn-home:hover, .btn-register:hover {
+    background-color: #ff1f1f;
+  }
+  select#language {
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #333;
+  }
+  main {
+    flex-grow: 1;
+    padding: 50px 30px;
+    background: rgba(255 255 255 / 0.15);
+    border-radius: 20px;
+    margin: 30px auto;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  }
+  p.greeting {
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 40px;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  }
+</style>
 </head>
 <body>
-  <div>
-    <h1>Ласкаво просимо до MyShop!</h1>
-    <p>Це головна сторінка вашого магазину. Тут ви можете розміщувати цікаві новини, акції або інформацію про ваші товари.</p>
-    <a href="index.html">Повернутися назад</a>
+
+<header>
+  <div class="left-buttons">
+    <button class="btn-home" id="homeBtn">Главная</button>
+    <button class="btn-register" id="registerBtn">Регистрация</button>
   </div>
+  <select id="language" title="Выберите язык">
+    <option value="ru">Русский</option>
+    <option value="en">English</option>
+    <option value="uk">Українська</option>
+  </select>
+</header>
+
+<main>
+  <h1 id="pageTitle">Добро пожаловать</h1>
+  <p class="greeting" id="greetingText">Это главная страница RayziShop. Здесь будет информация о товарах и акциях.</p>
+</main>
+
+<script>
+  const langSelect = document.getElementById('language');
+  const pageTitle = document.getElementById('pageTitle');
+  const greetingText = document.getElementById('greetingText');
+  const homeBtn = document.getElementById('homeBtn');
+  const registerBtn = document.getElementById('registerBtn');
+
+  const translations = {
+    ru: {
+      welcome: "Добро пожаловать",
+      greeting: "Это главная страница RayziShop. Здесь будет информация о товарах и акциях.",
+      home: "Главная",
+      register: "Регистрация"
+    },
+    en: {
+      welcome: "Welcome",
+      greeting: "This is the RayziShop main page. Here will be info about products and promotions.",
+      home: "Home",
+      register: "Register"
+    },
+    uk: {
+      welcome: "Ласкаво просимо",
+      greeting: "Це головна сторінка RayziShop. Тут буде інформація про товари та акції.",
+      home: "Головна",
+      register: "Реєстрація"
+    }
+  };
+
+  let currentLang = 'uk';
+  langSelect.value = currentLang;
+  updateText(currentLang);
+
+  langSelect.addEventListener('change', e => {
+    currentLang = e.target.value;
+    updateText(currentLang);
+  });
+
+  homeBtn.addEventListener('click', () => {
+    // Уже на главной - можно обновить или показать уведомление
+    alert(translations[currentLang].home + ' - ' + translations[currentLang].welcome);
+  });
+
+  registerBtn.addEventListener('click', () => {
+    // Для регистрации можно сделать редирект или открыть модальное окно
+    window.location.href = "index.html"; // или куда у тебя регистрация
+  });
+
+  function updateText(lang) {
+    pageTitle.textContent = translations[lang].welcome;
+    greetingText.textContent = translations[lang].greeting;
+    homeBtn.textContent = translations[lang].home;
+    registerBtn.textContent = translations[lang].register;
+  }
+</script>
+
 </body>
 </html>
