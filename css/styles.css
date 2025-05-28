@@ -167,3 +167,88 @@ p.greeting {
 .modal-footer a:hover {
   text-decoration: underline;
 }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%); /* Красный градиент */
+  margin: 0; padding: 0;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: rgba(0,0,0,0.3);
+  padding: 12px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.left-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-home, .btn-register {
+  background-color: #ff5252;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 15px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+}
+
+.btn-home:hover, .btn-register:hover {
+  background-color: #ff1f1f;
+  transform: scale(1.05);
+}
+
+.btn-home:active, .btn-register:active {
+  transform: scale(0.95);
+}
+
+.logo-title {
+  font-family: 'Georgia', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  flex-grow: 1;
+  user-select: none;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  color: #fff;
+}
+
+select#language {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.left-buttons > button {
+  animation: fadeInSlide 0.5s ease forwards;
+}
+
+button, select {
+  cursor: pointer;
+}

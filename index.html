@@ -1,110 +1,145 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RayziShop</title>
-  <style>
-    body {
-      margin: 0; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      background: rgba(255, 255, 255, 0.85);
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 10;
-    }
-    header .logo {
-      font-weight: 700;
-      font-size: 24px;
-      color: #2575fc;
-    }
-    nav {
-      display: flex;
-      gap: 20px;
-    }
-    nav button {
-      background: #2575fc;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      padding: 8px 20px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(37,117,252,0.4);
-      transition: background-color 0.3s ease;
-    }
-    nav button:hover {
-      background-color: #1a4fcc;
-    }
-    main {
-      flex-grow: 1;
-      padding: 40px 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-shadow: 0 0 5px rgba(0,0,0,0.3);
-      user-select: none;
-    }
-    h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 18px;
-      max-width: 600px;
-      text-align: center;
-      line-height: 1.4;
-      margin-bottom: 30px;
-    }
-    /* Подложка */
-    .background-layer {
-      position: fixed;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center/cover;
-      filter: brightness(0.6);
-      z-index: 0;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RayziShop - Главная</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    margin: 0; padding: 0;
+    color: #fff;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  header {
+    background: rgba(0,0,0,0.3);
+    padding: 15px 30px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
+  }
+  .left-buttons {
+    display: flex; gap: 20px;
+  }
+  .btn-home, .btn-register {
+    background: #ff5c5c;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 40px;
+    font-weight: 700;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.15s ease;
+  }
+  .btn-home:hover, .btn-register:hover {
+    background: #ff1f1f;
+  }
+  .btn-home:active, .btn-register:active {
+    transform: scale(0.95);
+  }
+  .shop-title {
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    font-weight: 900;
+    font-size: 2.8rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    pointer-events: none;
+  }
+  select#language {
+    font-size: 18px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    color: #333;
+    min-width: 140px;
+  }
+  main {
+    flex-grow: 1;
+    padding: 50px 30px;
+    background: rgba(255 255 255 / 0.15);
+    border-radius: 20px;
+    margin: 30px auto;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  }
+  p.greeting {
+    font-size: 1.5em;
+    margin-top: 0; margin-bottom: 40px;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  }
+</style>
 </head>
 <body>
 
-  <div class="background-layer"></div>
+<header>
+  <div class="left-buttons">
+    <button class="btn-home" id="homeBtn">Главная</button>
+    <button class="btn-register" id="registerBtn" onclick="location.href='register.html'">Регистрация</button>
+  </div>
+  <div class="shop-title">RayziShop</div>
+  <select id="language" title="Выберите язык">
+    <option value="ru" selected>Русский</option>
+    <option value="en">English</option>
+    <option value="uk">Українська</option>
+  </select>
+</header>
 
-  <header>
-    <div class="logo">RayziShop</div>
-    <nav>
-      <button id="btnHome">Главная</button>
-      <button id="btnRegister">Регистрация</button>
-    </nav>
-  </header>
+<main>
+  <h1 id="pageTitle">Добро пожаловать</h1>
+  <p class="greeting" id="greetingText">Выберите язык из меню сверху</p>
+</main>
 
-  <main>
-    <h1>Добро пожаловать в RayziShop</h1>
-    <p>Здесь вы можете зарегистрироваться, войти и начать покупки с удовольствием.</p>
-  </main>
+<script>
+  const langSelect = document.getElementById('language');
+  const pageTitle = document.getElementById('pageTitle');
+  const greetingText = document.getElementById('greetingText');
+  const homeBtn = document.getElementById('homeBtn');
 
-  <script>
-    document.getElementById('btnHome').onclick = () => {
-      window.location.href = 'index.html';
-    };
-    document.getElementById('btnRegister').onclick = () => {
-      window.location.href = 'register.html';
-    };
-  </script>
+  const translations = {
+    ru: {
+      welcome: "Добро пожаловать",
+      greeting: "Выберите язык из меню сверху",
+      home: "Главная",
+      homePageContent: "Это пустая страница для будущих товаров.",
+      register: "Регистрация",
+    },
+    en: {
+      welcome: "Welcome",
+      greeting: "Select a language from the menu above",
+      home: "Home",
+      homePageContent: "This is an empty page for future products.",
+      register: "Register",
+    },
+    uk: {
+      welcome: "Ласкаво просимо",
+      greeting: "Оберіть мову в меню зверху",
+      home: "Головна",
+      homePageContent: "Це порожня сторінка для майбутніх товарів.",
+      register: "Реєстрація",
+    }
+  };
+
+  langSelect.addEventListener('change', (e) => {
+    const lang = e.target.value;
+    pageTitle.textContent = translations[lang].welcome;
+    greetingText.textContent = translations[lang].greeting;
+    homeBtn.textContent = translations[lang].home;
+    document.querySelector('.btn-register').textContent = translations[lang].register;
+  });
+</script>
 
 </body>
 </html>
-
-
