@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RayziShop - Регистрация</title>
-
+<title>RayziShop - Личный кабинет</title>
 <style>
-  /* Общие стили */
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
@@ -16,7 +14,6 @@
     display: flex;
     flex-direction: column;
   }
-
   header {
     background-color: rgba(0,0,0,0.3);
     padding: 15px 30px;
@@ -25,13 +22,7 @@
     justify-content: space-between;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   }
-
-  .left-buttons {
-    display: flex;
-    gap: 15px;
-  }
-
-  .btn-home, .btn-register {
+  .btn-logout {
     background-color: #ff5c5c;
     border: none;
     border-radius: 30px;
@@ -42,20 +33,9 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  .btn-home:hover, .btn-register:hover {
+  .btn-logout:hover {
     background-color: #ff1f1f;
   }
-
-  select#language {
-    font-size: 16px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    color: #333;
-  }
-
   main {
     flex-grow: 1;
     padding: 50px 30px;
@@ -67,455 +47,114 @@
     box-shadow: 0 8px 30px rgba(0,0,0,0.2);
     text-align: center;
   }
-
   h1 {
     font-size: 3em;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
   }
-
-  p.greeting {
-    font-size: 1.5em;
-    margin-top: 0;
-    margin-bottom: 40px;
+  .profile-info {
+    font-size: 1.3em;
+    margin-bottom: 25px;
     font-weight: 600;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   }
-
-  #registerModal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background-color: rgba(0,0,0,0.7);
-    display: none;
-    justify-content: center;
-    align-items: center;
+  label {
+    font-weight: 600;
+    font-size: 1.1em;
   }
-
-  .modal-content {
-    background: #fff;
-    padding: 30px;
+  select {
+    margin-left: 10px;
+    padding: 7px 14px;
     border-radius: 15px;
-    max-width: 400px;
-    width: 90%;
-    color: #333;
-    text-align: left;
-    position: relative;
-  }
-  .modal-content h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
-  }
-  .modal-content input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-  .modal-content button {
-    width: 100%;
-    padding: 10px;
-    background-color: #2575fc;
-    color: #fff;
     border: none;
-    border-radius: 8px;
-    font-weight: bold;
+    font-size: 16px;
     cursor: pointer;
-  }
-  .modal-footer {
-    margin-top: 15px;
-    text-align: center;
-  }
-  .modal-footer a {
-    color: #2575fc;
-    text-decoration: none;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  /* Круг загрузки */
-  .loader {
-    border: 4px solid #f3f3f3; /* светлый */
-    border-top: 4px solid #2575fc; /* синий */
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    display: none;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  /* Ошибки */
-  .error-message {
-    color: red;
-    font-size: 0.9em;
-    margin-top: 5px;
+    font-weight: 600;
+    color: #333;
   }
 </style>
 </head>
 <body>
-
 <header>
-  <div class="left-buttons">
-    <button class="btn-home" id="homeBtn">Главная</button>
-    <button class="btn-register" id="registerBtn">Регистрация</button>
-  </div>
-  <select id="language" title="Выберите язык">
-    <option value="ru">Русский</option>
-    <option value="en">English</option>
-    <option value="uk">Українська</option>
-  </select>
+  <div>RayziShop - Личный кабинет</div>
+  <button class="btn-logout" id="logoutBtn">Выйти</button>
 </header>
-
 <main>
-  <h1 id="pageTitle">Добро пожаловать</h1>
-  <p class="greeting" id="greetingText">Выберите язык из меню сверху</p>
+  <h1>Добро пожаловать, <span id="userName">...</span></h1>
+  <div class="profile-info">
+    <p><strong>Email:</strong> <span id="userEmail">...</span></p>
+    <p><strong>Баланс:</strong> <span id="userBalance">0</span> <select id="currencySelect">
+      <option value="USD" selected>USD</option>
+      <option value="EUR">EUR</option>
+      <option value="RUB">RUB</option>
+      <option value="UAH">UAH</option>
+    </select></p>
+  </div>
 </main>
 
-<div id="registerModal">
-  <div class="modal-content">
-    <h2 id="registerTitle">Регистрация</h2>
-    <input type="text" id="name" placeholder="Имя" />
-    <div id="nameError" class="error-message"></div>
-    <input type="email" id="email" placeholder="Email" />
-    <div id="emailError" class="error-message"></div>
-    <input type="password" id="password" placeholder="Пароль" />
-    <div id="passwordError" class="error-message"></div>
-    <button id="submitRegister">Зарегистрироваться</button>
-    <div class="loader" id="loader"></div>
-    <div class="modal-footer">
-      <span id="haveAccountText">Уже есть аккаунт? </span><a href="#" id="loginLink">Войти</a>
-    </div>
-  </div>
-</div>
-
-<div id="loginModal" style="display:none;">
-  <div class="modal-content">
-    <h2 id="loginTitle">Вход</h2>
-    <input type="email" id="loginEmail" placeholder="Email" />
-    <div id="loginEmailError" class="error-message"></div>
-    <input type="password" id="loginPassword" placeholder="Пароль" />
-    <div id="loginPasswordError" class="error-message"></div>
-    <button id="submitLogin">Войти</button>
-    <div class="loader" id="loginLoader"></div>
-    <div class="modal-footer">
-      <span id="noAccountText">Нет аккаунта? </span><a href="#" id="toRegisterLink">Зарегистрироваться</a>
-    </div>
-  </div>
-</div>
-
 <script>
-  const langSelect = document.getElementById('language');
-  const pageTitle = document.getElementById('pageTitle');
-  const greetingText = document.getElementById('greetingText');
-  const homeBtn = document.getElementById('homeBtn');
-  const registerBtn = document.getElementById('registerBtn');
-  const registerModal = document.getElementById('registerModal');
-  const registerTitle = document.getElementById('registerTitle');
-  const submitRegister = document.getElementById('submitRegister');
-  const haveAccountText = document.getElementById('haveAccountText');
-  const loginLink = document.getElementById('loginLink');
-  const loader = document.getElementById('loader');
+  const userNameElem = document.getElementById('userName');
+  const userEmailElem = document.getElementById('userEmail');
+  const userBalanceElem = document.getElementById('userBalance');
+  const currencySelect = document.getElementById('currencySelect');
+  const logoutBtn = document.getElementById('logoutBtn');
 
-  const loginModal = document.getElementById('loginModal');
-  const submitLogin = document.getElementById('submitLogin');
-  const toRegisterLink = document.getElementById('toRegisterLink');
-  const loginLoader = document.getElementById('loginLoader');
-
-  const nameInput = document.getElementById('name');
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-
-  const loginEmailInput = document.getElementById('loginEmail');
-  const loginPasswordInput = document.getElementById('loginPassword');
-
-  const nameError = document.getElementById('nameError');
-  const emailError = document.getElementById('emailError');
-  const passwordError = document.getElementById('passwordError');
-
-  const loginEmailError = document.getElementById('loginEmailError');
-  const loginPasswordError = document.getElementById('loginPasswordError');
-
-  const translations = {
-    ru: {
-      welcome: "Добро пожаловать",
-      greeting: "Выберите язык из меню сверху",
-      home: "Главная",
-      homePageContent: "Это пустая страница для будущих товаров.",
-      register: "Регистрация",
-      registerTitle: "Регистрация",
-      submit: "Зарегистрироваться",
-      haveAccount: "Уже есть аккаунт?",
-      login: "Войти",
-      loginTitle: "Вход",
-      noAccount: "Нет аккаунта?",
-      errorName: "Пожалуйста, введите имя",
-      errorEmail: "Пожалуйста, введите корректный email",
-      errorEmailExists: "Пользователь с таким email уже существует",
-      errorPassword: "Пароль должен быть не менее 6 символов",
-      errorLogin: "Неверный email или пароль"
-    },
-    en: {
-      welcome: "Welcome",
-      greeting: "Select a language from the menu above",
-      home: "Home",
-      homePageContent: "This is an empty page for future products.",
-      register: "Register",
-      registerTitle: "Register",
-      submit: "Sign Up",
-      haveAccount: "Already have an account?",
-      login: "Log in",
-      loginTitle: "Login",
-      noAccount: "No account?",
-      errorName: "Please enter your name",
-      errorEmail: "Please enter a valid email",
-      errorEmailExists: "User with this email already exists",
-      errorPassword: "Password must be at least 6 characters",
-      errorLogin: "Incorrect email or password"
-    },
-    uk: {
-      welcome: "Ласкаво просимо",
-      greeting: "Оберіть мову в меню зверху",
-      home: "Головна",
-      homePageContent: "Це порожня сторінка для майбутніх товарів.",
-      register: "Реєстрація",
-      registerTitle: "Реєстрація",
-      submit: "Зареєструватися",
-      haveAccount: "Вже є акаунт?",
-      login: "Увійти",
-      loginTitle: "Вхід",
-      noAccount: "Нема акаунту?",
-      errorName: "Будь ласка, введіть ім'я",
-      errorEmail: "Будь ласка, введіть коректний email",
-      errorEmailExists: "Користувач з таким email вже існує",
-      errorPassword: "Пароль повинен містити щонайменше 6 символів",
-      errorLogin: "Невірний email або пароль"
+  // Загрузка текущего пользователя из localStorage
+  function loadUser() {
+    const currentUserEmail = localStorage.getItem('currentUserEmail');
+    if (!currentUserEmail) {
+      alert('Пожалуйста, войдите в аккаунт');
+      window.location.href = 'register.html';
+      return null;
     }
-  };
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === currentUserEmail);
+    if (!user) {
+      alert('Пользователь не найден. Пожалуйста, войдите заново.');
+      localStorage.removeItem('currentUserEmail');
+      window.location.href = 'register.html';
+      return null;
+    }
+    return user;
+  }
 
-  let currentLang = 'uk';
-  langSelect.value = currentLang;
-  updateText(currentLang);
+  // Отобразить данные пользователя
+  function displayUser(user) {
+    userNameElem.textContent = user.name;
+    userEmailElem.textContent = user.email;
+    userBalanceElem.textContent = user.balance.toFixed(2);
+    if (user.currency) {
+      currencySelect.value = user.currency;
+    }
+  }
 
-  langSelect.addEventListener('change', (e) => {
-    currentLang = e.target.value;
-    updateText(currentLang);
-  });
-
-  homeBtn.addEventListener('click', () => {
-    pageTitle.textContent = translations[currentLang].home;
-    greetingText.textContent = translations[currentLang].homePageContent;
-  });
-
-  registerBtn.addEventListener('click', () => {
-    showRegister();
-  });
-
-  registerModal.addEventListener('click', (e) => {
-    if (e.target === registerModal) {
-      hideRegister();
+  // Обновить валюту в user и сохранить
+  currencySelect.addEventListener('change', () => {
+    const user = loadUser();
+    if (!user) return;
+    user.currency = currencySelect.value;
+    // Обновляем пользователя в массиве и сохраняем
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const idx = users.findIndex(u => u.email === user.email);
+    if (idx !== -1) {
+      users[idx] = user;
+      localStorage.setItem('users', JSON.stringify(users));
+      displayUser(user);
     }
   });
 
-  loginModal.addEventListener('click', (e) => {
-    if (e.target === loginModal) {
-      hideLogin();
-    }
+  // Кнопка выхода
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('currentUserEmail');
+    alert('Вы вышли из аккаунта');
+    window.location.href = 'register.html';
   });
 
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    hideRegister();
-    showLogin();
-  });
-
-  toRegisterLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    hideLogin();
-    showRegister();
-  });
-
-  function updateText(lang) {
-    pageTitle.textContent = translations[lang].welcome;
-    greetingText.textContent = translations[lang].greeting;
-    homeBtn.textContent = translations[lang].home;
-    registerBtn.textContent = translations[lang].register;
-    registerTitle.textContent = translations[lang].registerTitle;
-    submitRegister.textContent = translations[lang].submit;
-    haveAccountText.textContent = translations[lang].haveAccount + ' ';
-    loginLink.textContent = translations[lang].login;
-    loginEmailError.textContent = '';
-    loginPasswordError.textContent = '';
-    loginModal.querySelector('h2').textContent = translations[lang].loginTitle;
-    submitLogin.textContent = translations[lang].login;
-    toRegisterLink.textContent = translations[lang].register;
-    loginModal.querySelector('.modal-footer span').textContent = translations[lang].noAccount + ' ';
-    nameError.textContent = '';
-    emailError.textContent = '';
-    passwordError.textContent = '';
+  // Загрузка и показ при загрузке страницы
+  const currentUser = loadUser();
+  if (currentUser) {
+    displayUser(currentUser);
   }
-
-  function showRegister() {
-    registerModal.style.display = 'flex';
-    loginModal.style.display = 'none';
-    clearRegisterForm();
-  }
-
-  function hideRegister() {
-    registerModal.style.display = 'none';
-    clearRegisterForm();
-  }
-
-  function showLogin() {
-    loginModal.style.display = 'flex';
-    registerModal.style.display = 'none';
-    clearLoginForm();
-  }
-
-  function hideLogin() {
-    loginModal.style.display = 'none';
-    clearLoginForm();
-  }
-
-  function clearRegisterForm() {
-    nameInput.value = '';
-    emailInput.value = '';
-    passwordInput.value = '';
-    nameError.textContent = '';
-    emailError.textContent = '';
-    passwordError.textContent = '';
-    loader.style.display = 'none';
-  }
-
-  function clearLoginForm() {
-    loginEmailInput.value = '';
-    loginPasswordInput.value = '';
-    loginEmailError.textContent = '';
-    loginPasswordError.textContent = '';
-    loginLoader.style.display = 'none';
-  }
-
-  function validateEmail(email) {
-    // Простая проверка email
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
-  }
-
-  function getUsers() {
-    // Получить пользователей из localStorage или вернуть пустой массив
-    const users = localStorage.getItem('users');
-    return users ? JSON.parse(users) : [];
-  }
-
-  function saveUsers(users) {
-    localStorage.setItem('users', JSON.stringify(users));
-  }
-
-  submitRegister.addEventListener('click', () => {
-    // Очистка ошибок
-    nameError.textContent = '';
-    emailError.textContent = '';
-    passwordError.textContent = '';
-
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim().toLowerCase();
-    const password = passwordInput.value;
-
-    let valid = true;
-
-    if (!name) {
-      nameError.textContent = translations[currentLang].errorName;
-      valid = false;
-    }
-    if (!validateEmail(email)) {
-      emailError.textContent = translations[currentLang].errorEmail;
-      valid = false;
-    }
-    if (password.length < 6) {
-      passwordError.textContent = translations[currentLang].errorPassword;
-      valid = false;
-    }
-
-    if (!valid) return;
-
-    // Проверка, есть ли такой email
-    const users = getUsers();
-    if (users.find(u => u.email === email)) {
-      emailError.textContent = translations[currentLang].errorEmailExists;
-      return;
-    }
-
-    loader.style.display = 'block';
-    submitRegister.disabled = true;
-
-    // Имитируем асинхронную регистрацию (например, с сервером)
-    setTimeout(() => {
-      users.push({ name, email, password, balance: 0, currency: 'USD' });
-      saveUsers(users);
-
-      loader.style.display = 'none';
-      submitRegister.disabled = false;
-      alert('Регистрация успешна! Теперь можно войти.');
-
-      hideRegister();
-      showLogin();
-    }, 1500);
-  });
-
-  submitLogin.addEventListener('click', () => {
-    loginEmailError.textContent = '';
-    loginPasswordError.textContent = '';
-
-    const email = loginEmailInput.value.trim().toLowerCase();
-    const password = loginPasswordInput.value;
-
-    if (!validateEmail(email)) {
-      loginEmailError.textContent = translations[currentLang].errorEmail;
-      return;
-    }
-    if (!password) {
-      loginPasswordError.textContent = translations[currentLang].errorPassword;
-      return;
-    }
-
-    loginLoader.style.display = 'block';
-    submitLogin.disabled = true;
-
-    setTimeout(() => {
-      const users = getUsers();
-      const user = users.find(u => u.email === email && u.password === password);
-
-      if (!user) {
-        loginEmailError.textContent = translations[currentLang].errorLogin;
-        loginLoader.style.display = 'none';
-        submitLogin.disabled = false;
-        return;
-      }
-
-      loginLoader.style.display = 'none';
-      submitLogin.disabled = false;
-
-      alert(`Добро пожаловать, ${user.name}!`);
-
-      // Сохраняем текущего пользователя в localStorage (например, для dashboard)
-      localStorage.setItem('currentUser', JSON.stringify(user));
-
-      hideLogin();
-
-      // Можно здесь перейти на dashboard.html
-      window.location.href = 'dashboard.html';
-
-    }, 1500);
-  });
 </script>
-
 </body>
 </html>
